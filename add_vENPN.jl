@@ -1,6 +1,6 @@
 using CSV, DataFrames, DataFramesMeta
 
-dir = "C:/2020CanadaBanyanPlus/"
+dir = "C:/2020CERMyrtle/"
 
 # vENPN ===============================
 
@@ -49,7 +49,7 @@ df = CSV.read(floc, DataFrame; delim=';')
 @subset! df :Fuel .∉ Ref(["Hydrogen", "Ethanol", "Biodiesel"])
 
 add = allcombinations(DataFrame, "Variable" => unique(df.Variable),
-  "Year" => unique(df.Year),
+  "Year" => unique([df.Year; 2020:2030]),
   "Area" => unique(df.Area),
   "Fuel" => ["Hydrogen", "Ethanol", "Biodiesel"],
   "Sector" => unique(df.Sector),
@@ -69,7 +69,7 @@ df = CSV.read(floc, DataFrame; delim=';')
 @subset! df :Fuel .∉ Ref(["Hydrogen", "Ethanol", "Biodiesel"])
 
 add = allcombinations(DataFrame, "Variable" => unique(df.Variable),
-  "Year" => unique(df.Year),
+  "Year" => unique([df.Year; 2020:2030]),
   "Area" => unique(df.Area),
   "Fuel" => ["Hydrogen", "Ethanol", "Biodiesel"],
   "Sector" => unique(df.Sector),
