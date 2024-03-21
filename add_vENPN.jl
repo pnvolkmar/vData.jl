@@ -42,11 +42,19 @@ df = CSV.read(floc, DataFrame; delim=';')
 add = allcombinations(DataFrame, "Variable" => unique(df.Variable),
   "Year" => unique(df.Year),
   "Area" => unique(df.Area),
-  "Fuel" => ["Hydrogen", "Ethanol", "Biodiesel"],
+  "Fuel" => ["Hydrogen"],
   "Sector" => unique(df.Sector),
   "Units" => raw"Real 2019 CN$/mmBtu",
   "Data" => 30.0
 )
+out = vcat(df, add)
+
+add = @subset df :Fuel .== "Gasoline"
+add.Fuel .= "Ethanol"
+out = vcat(df, add)
+
+add = @subset df :Fuel .== "Light Fuel Oil"
+add.Fuel .= "Biodiesel"
 out = vcat(df, add)
 
 out = @orderby(out, :Year, :Area, :Fuel, :Sector)
