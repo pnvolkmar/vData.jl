@@ -5,6 +5,7 @@ dir = "C:/2020CERMyrtle/"
 # vENPN ===============================
 
 filename = "vENPN.dat"
+floc = joinpath(dir, "InputData", "vData_OilRefinery", filename)
 floc = joinpath(dir, "InputData", "vData", filename)
 df = CSV.read(floc, DataFrame; delim=';')
 @subset! df :Fuel .∉ Ref(["Hydrogen", "Ethanol", "Biodiesel"])
@@ -12,11 +13,21 @@ df = CSV.read(floc, DataFrame; delim=';')
 add = allcombinations(DataFrame, "Variable" => unique(df.Variable),
   "Year" => unique(df.Year),
   "Area" => unique(df.Area),
-  "Fuel" => ["Hydrogen", "Biodiesel", "Ethanol"],
+  "Fuel" => ["Hydrogen"],
   "Units" => raw"Real 2019 CN$/mmBtu",
   "Data" => 20.0
 )
+
 out = vcat(df, add)
+
+add = @subset df :Fuel .== "Heavy Crude Oil"
+add.Fuel .= "Biodiesel"
+out = vcat(df, add)
+
+add = @subset df :Fuel .== "Light Crude Oil"
+add.Fuel .= "Ethanol"
+out = vcat(df, add)
+
 
 out = @orderby(out, :Year, :Fuel)
 CSV.write(floc, out; delim=';')
@@ -54,7 +65,7 @@ add = allcombinations(DataFrame, "Variable" => unique(df.Variable),
   "Fuel" => ["Hydrogen", "Ethanol", "Biodiesel"],
   "Sector" => unique(df.Sector),
   "Units" => raw"Real 2019 CN$/mmBtu",
-  "Data" => 2.0
+  "Data" => 0.0
 )
 out = vcat(df, add)
 
@@ -74,7 +85,7 @@ add = allcombinations(DataFrame, "Variable" => unique(df.Variable),
   "Fuel" => ["Hydrogen", "Ethanol", "Biodiesel"],
   "Sector" => unique(df.Sector),
   "Units" => raw"CN$/CN$",
-  "Data" => 0.25
+  "Data" => 0.0
 )
 out = vcat(df, add)
 
