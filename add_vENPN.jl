@@ -8,7 +8,7 @@ filename = "vENPN.dat"
 floc = joinpath(dir, "InputData", "vData_OilRefinery", filename)
 floc = joinpath(dir, "InputData", "vData", filename)
 df = CSV.read(floc, DataFrame; delim=';')
-@subset! df :Fuel .∉ Ref(["Hydrogen", "Ethanol", "Biodiesel"])
+out = @subset! df :Fuel .∉ Ref(["Hydrogen", "Ethanol", "Biodiesel"])
 
 add = allcombinations(DataFrame, "Variable" => unique(df.Variable),
   "Year" => unique(df.Year),
@@ -18,15 +18,15 @@ add = allcombinations(DataFrame, "Variable" => unique(df.Variable),
   "Data" => 20.0
 )
 
-out = vcat(df, add)
+out = vcat(out, add)
 
 add = @subset df :Fuel .== "Heavy Crude Oil"
 add.Fuel .= "Biodiesel"
-out = vcat(df, add)
+out = vcat(out, add)
 
 add = @subset df :Fuel .== "Light Crude Oil"
 add.Fuel .= "Ethanol"
-out = vcat(df, add)
+out = vcat(out, add)
 
 
 out = @orderby(out, :Year, :Fuel)
@@ -37,7 +37,7 @@ CSV.write(floc, out; delim=';')
 filename = "vFPBaseF.dat"
 floc = joinpath(dir, "InputData", "vData", filename)
 df = CSV.read(floc, DataFrame; delim=';')
-@subset! df :Fuel .∉ Ref(["Hydrogen", "Ethanol", "Biodiesel"])
+out = @subset! df :Fuel .∉ Ref(["Hydrogen", "Ethanol", "Biodiesel"])
 
 add = allcombinations(DataFrame, "Variable" => unique(df.Variable),
   "Year" => unique(df.Year),
@@ -47,15 +47,15 @@ add = allcombinations(DataFrame, "Variable" => unique(df.Variable),
   "Units" => raw"Real 2019 CN$/mmBtu",
   "Data" => 30.0
 )
-out = vcat(df, add)
+out = vcat(out, add)
 
 add = @subset df :Fuel .== "Gasoline"
 add.Fuel .= "Ethanol"
-out = vcat(df, add)
+out = vcat(out, add)
 
 add = @subset df :Fuel .== "Light Fuel Oil"
 add.Fuel .= "Biodiesel"
-out = vcat(df, add)
+out = vcat(out, add)
 
 out = @orderby(out, :Year, :Area, :Fuel, :Sector)
 CSV.write(floc, out; delim=';')
@@ -65,7 +65,7 @@ CSV.write(floc, out; delim=';')
 filename = "vFPTaxF.dat"
 floc = joinpath(dir, "InputData", "vData", filename)
 df = CSV.read(floc, DataFrame; delim=';')
-@subset! df :Fuel .∉ Ref(["Hydrogen", "Ethanol", "Biodiesel"])
+out = @subset! df :Fuel .∉ Ref(["Hydrogen", "Ethanol", "Biodiesel"])
 
 add = allcombinations(DataFrame, "Variable" => unique(df.Variable),
   "Year" => unique([df.Year; 2020:2030]),
@@ -75,15 +75,15 @@ add = allcombinations(DataFrame, "Variable" => unique(df.Variable),
   "Units" => raw"Real 2019 CN$/mmBtu",
   "Data" => 0.0
 )
-out = vcat(df, add)
+out = vcat(out, add)
 
 add = @subset df :Fuel .== "Gasoline"
 add.Fuel .= "Ethanol"
-out = vcat(df, add)
+out = vcat(out, add)
 
 add = @subset df :Fuel .== "Light Fuel Oil"
 add.Fuel .= "Biodiesel"
-out = vcat(df, add)
+out = vcat(out, add)
 
 out = @orderby(out, :Year, :Area, :Fuel, :Sector)
 CSV.write(floc, out; delim=';')
@@ -93,7 +93,7 @@ CSV.write(floc, out; delim=';')
 filename = "vFPSMF.dat"
 floc = joinpath(dir, "InputData", "vData", filename)
 df = CSV.read(floc, DataFrame; delim=';')
-@subset! df :Fuel .∉ Ref(["Hydrogen", "Ethanol", "Biodiesel"])
+out = @subset! df :Fuel .∉ Ref(["Hydrogen", "Ethanol", "Biodiesel"])
 
 add = allcombinations(DataFrame, "Variable" => unique(df.Variable),
   "Year" => unique([df.Year; 2020:2030]),
@@ -103,15 +103,15 @@ add = allcombinations(DataFrame, "Variable" => unique(df.Variable),
   "Units" => raw"CN$/CN$",
   "Data" => 0.0
 )
-out = vcat(df, add)
+out = vcat(out, add)
 
 add = @subset df :Fuel .== "Gasoline"
 add.Fuel .= "Ethanol"
-out = vcat(df, add)
+out = vcat(out, add)
 
 add = @subset df :Fuel .== "Light Fuel Oil"
 add.Fuel .= "Biodiesel"
-out = vcat(df, add)
+out = vcat(out, add)
 
 out = @orderby(out, :Year, :Area, :Fuel, :Sector)
 CSV.write(floc, out; delim=';')
@@ -144,4 +144,4 @@ CSV.write(floc, out; delim=';')
 # out = @orderby(out, :Year, :Area, :Fuel, :Sector)
 # CSV.write(floc, out; delim=';')
 
-sum(df.Fuel .∉ Ref(["Hydrogen", "Ethanol", "Biodiesel"]))
+# sum(df.Fuel .∉ Ref(["Hydrogen", "Ethanol", "Biodiesel"]))
